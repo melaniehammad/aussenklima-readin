@@ -16,7 +16,11 @@
 #define AIR_PRESSURE_DATA_ID	03
 #define BRIGHTNESS_DATA_ID		04//depricated
 #define CO2_DATA_ID				05
-#define PARTICULATES_DATA_ID	06//likely to change
+//#define PARTICULATES_DATA_ID	06//likely to change
+#define PM25_CONCENTRATION_ID	61
+#define PM10_CONCENTRATION_ID	62
+#define PM25_AMOUNT_ID			63
+#define PM10_AMOUNT_ID			64
 
 typedef struct {
 	uint8_t sensor_id;

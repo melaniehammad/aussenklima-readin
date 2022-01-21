@@ -129,7 +129,7 @@ int main(int argc, char **argv){
 
 int evaluate(void* _arg){
 	databox *arg = (databox*)_arg;
-	char information_string[10];
+	char information_string[15];
 	double data = -1.0;
 #ifdef DEBUG
 	printf("EVAL: databytes are %02x %02x %02x %02x\n", arg->bytes[0], arg->bytes[1], arg->bytes[2], arg->bytes[3]);
@@ -176,13 +176,34 @@ int evaluate(void* _arg){
 			//data = readCO2Data(arg->bytes);
 			strcpy(information_string, "co2");
 			break;
-		case PARTICULATES_DATA_ID:
+		case PM25_CONCENTRATION_ID:
 #ifdef DEBUG
-			printf("Fine Particle Data recieved\n");
+			printf("PM2.5 concentraion Data recieved\n");
 #endif
-			//data = readFinePData(arg->bytes);
-			strcpy(information_string, "fine_part");
-			break;
+			data = readPM25conc(arg->bytes);
+			if(data == -1.0) thrd_exit(1);
+			strcpy(information_string, "PM2.5conc");
+		case PM10_CONCENTRATION_ID:
+#ifdef DEBUG
+			printf("PM10 concentraion Data recieved\n");
+#endif
+			data = readPM10conc(arg->bytes);
+			if(data == -1.0) thrd_exit(1);
+			strcpy(information_string, "PM10conc");
+		case PM25_AMOUNT_ID:
+#ifdef DEBUG
+			printf("PM2.5 amount Data recieved\n");
+#endif
+			data = readPM25amount(arg->bytes);
+			if(data == -1.0) thrd_exit(1);
+			strcpy(information_string, "PM2.5amount");
+		case PM10_AMOUNT_ID:
+#ifdef DEBUG
+			printf("PM10 amount Data recieved\n");
+#endif
+			data = readPM10amount(arg->bytes);
+			if(data == -1.0) thrd_exit(1);
+			strcpy(information_string, "PM10amount");
 		default:
 #ifdef DEBUG
 			printf("Unknown Information (%d), aborting...\n", arg->information_id);
@@ -190,6 +211,10 @@ int evaluate(void* _arg){
 			thrd_exit(1);
 			break;
 	}
+	#define PM25_concentration		61
+#define PM10_concentration		62
+#define PM25_amount				63
+#define PM10_amount				64
 		
 	pid_t pid = fork();
 	if(pid == -1){
